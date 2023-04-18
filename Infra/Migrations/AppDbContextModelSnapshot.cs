@@ -168,7 +168,7 @@ namespace Infra.Migrations
                     b.Property<string>("Valor")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("double")
+                        .HasColumnType("integer")
                         .HasColumnName("Valor");
 
                     b.HasKey("Id");
@@ -180,13 +180,13 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("ProdutosPedidos", b =>
                 {
-                    b.Property<int>("FK_ProdutosPedidos_PedidoId")
+                    b.Property<int>("PedidoId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProdutoId")
                         .HasColumnType("int");
 
-                    b.HasKey("FK_ProdutosPedidos_PedidoId", "ProdutoId");
+                    b.HasKey("PedidoId", "ProdutoId");
 
                     b.HasIndex("ProdutoId");
 
@@ -220,9 +220,10 @@ namespace Infra.Migrations
                 {
                     b.HasOne("Domain.Entidades.Pedido", null)
                         .WithMany()
-                        .HasForeignKey("FK_ProdutosPedidos_PedidoId")
+                        .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_ProdutosPedidos_PedidoId");
 
                     b.HasOne("Domain.Entidades.Produto", null)
                         .WithMany()

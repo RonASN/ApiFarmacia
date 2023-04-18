@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class Primeiromigration : Migration
+    public partial class initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,7 +51,7 @@ namespace Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
-                    Valor = table.Column<string>(type: "double", maxLength: 100, nullable: false),
+                    Valor = table.Column<string>(type: "integer", maxLength: 100, nullable: false),
                     Quantidade = table.Column<int>(type: "integer", nullable: false),
                     Descricao = table.Column<string>(type: "NVARCHAR(200)", maxLength: 200, nullable: false),
                     Imagem = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: false),
@@ -93,15 +93,15 @@ namespace Infra.Migrations
                 name: "ProdutosPedidos",
                 columns: table => new
                 {
-                    FK_ProdutosPedidos_PedidoId = table.Column<int>(type: "int", nullable: false),
+                    PedidoId = table.Column<int>(type: "int", nullable: false),
                     ProdutoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProdutosPedidos", x => new { x.FK_ProdutosPedidos_PedidoId, x.ProdutoId });
+                    table.PrimaryKey("PK_ProdutosPedidos", x => new { x.PedidoId, x.ProdutoId });
                     table.ForeignKey(
-                        name: "FK_ProdutosPedidos_Pedidos_FK_ProdutosPedidos_PedidoId",
-                        column: x => x.FK_ProdutosPedidos_PedidoId,
+                        name: "FK_ProdutosPedidos_PedidoId",
+                        column: x => x.PedidoId,
                         principalTable: "Pedidos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);

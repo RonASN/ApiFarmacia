@@ -41,7 +41,8 @@ namespace Infra.Mappings
                         pedido => pedido
                             .HasOne<Pedido>()
                             .WithMany()
-                            .HasForeignKey("FK_ProdutosPedidos_PedidoId")
+                            .HasForeignKey("PedidoId")
+                            .HasConstraintName("FK_ProdutosPedidos_PedidoId")
                             .OnDelete(DeleteBehavior.Cascade));
         }
     }

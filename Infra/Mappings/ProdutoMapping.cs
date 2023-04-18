@@ -20,7 +20,7 @@ namespace Infra.Mappings
             builder.Property(x => x.Valor)
                 .IsRequired()
                 .HasColumnName("Valor")
-                .HasColumnType("double")
+                .HasColumnType("integer")
                 .HasMaxLength(100);
 
             builder.Property(x => x.Quantidade)
