@@ -1,4 +1,5 @@
 ﻿using Domain.Entidades;
+using Infra.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra
@@ -11,13 +12,14 @@ namespace Infra
         public DbSet<Produto> Produtos { get; set; }    
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=localhost,1433;Database=farmacia_db;User ID=sa;Password=@Ronnan123");
+        => options.UseSqlServer("Server=localhost,1433;Database=farmaciaDb;User ID=sa;Password=@Ronnan123");
         
-        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new )
-            modelBuilder.ApplyConfiguration(new )
-            modelBuilder.ApplyConfiguration(new )
-        }*/
+            modelBuilder.ApplyConfiguration(new ClienteMapping());
+            modelBuilder.ApplyConfiguration(new PedidoMapping());
+            modelBuilder.ApplyConfiguration(new ProdutoMapping());
+            modelBuilder.ApplyConfiguration(new CategoriaMapping());
+        }
     }
 }

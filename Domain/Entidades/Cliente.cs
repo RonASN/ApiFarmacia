@@ -11,5 +11,6 @@
         public string? Quadra { get; set; }
         public string? Conjunto { get; set; }
         public string? Telefone { get; set; }
+        public IEnumerable<Pedido> PedidoCliente { get; set; }
     }
 }
