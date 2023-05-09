@@ -12,7 +12,7 @@ namespace Infra
         public DbSet<Produto> Produtos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=localhost,1433;Database=farmaciaDb;User ID=sa;Password=@Ronnan123; TrustServerCertificate=True"); 
+        => options.UseSqlServer("Server=localhost,1433;Database=ApiFarmacia;User ID=sa;Password=@ronnan2023; TrustServerCertificate=True"); 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
