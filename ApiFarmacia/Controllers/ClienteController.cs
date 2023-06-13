@@ -1,5 +1,6 @@
 ﻿using ApiFarmacia.Controller.Models;
 using ApiFarmacia.Controllers.Models;
+using ApiFarmacia.Extensions;
 using Domain.Entidades;
 using Infra;
 using Microsoft.AspNetCore.Mvc;
@@ -28,17 +29,27 @@ namespace ApiFarmacia.Controller
         [HttpGet("cliente/buscar/{id:int}")]
         public async Task<IActionResult> GetAsync([FromServices] AppDbContext context, [FromRoute] int id)
         {
-            var cliente = await context.Clientes.FirstOrDefaultAsync(x => x.Id == id);
+            try
+            {
+                var cliente = await context.Clientes.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (cliente == null)
-                return NotFound();
+                if (cliente == null)
+                    return NotFound(new ResultModel<Cliente>("Cliente não encontrado"));
 
-            return Ok(cliente);
+                return Ok(new ResultModel<Cliente>(cliente));
+            }
+            catch 
+            {
+                return StatusCode(500, "05x04 - Falha interna no servidor");
+            }
         }
 
         [HttpPost("cliente/criar")]
-        public async Task<IActionResult> PostAsync([FromServices] AppDbContext context, [FromBody] ClienteModel model)
+        public async Task<IActionResult> PostAsync([FromServices] AppDbContext context, [FromBody] EditorClienteModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(new ResultModel<Cliente>(ModelState.GetErrors()));
+
             try
             {
                 var cliente = new Cliente
@@ -56,27 +67,27 @@ namespace ApiFarmacia.Controller
                 };
                 context.Clientes.Add(cliente);
                 context.SaveChanges();
-                return Created($"v1/cliente/{model.Id}", model);
+                return Created($"v1/cliente/{model.Id}", new ResultModel<Cliente>(cliente));
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest("Não foi possível incluir o cliente");
+                return StatusCode(500, new ResultModel<Cliente>("05x04 - Não foi possível incluir cliente"));
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, "Falha interna no servidor");
+                return StatusCode(500, new ResultModel<Cliente>("05x10 - Falha interna no servidor"));
             }
 
         }
 
         [HttpPut("cliente/editar/{id:int}")]
-        public async Task<IActionResult> PutAsync([FromServices] AppDbContext context, [FromRoute] int id, [FromBody] ClienteModel model)
+        public async Task<IActionResult> PutAsync([FromServices] AppDbContext context, [FromRoute] int id, [FromBody] EditorClienteModel model)
         {
             try
             {
                 var cliente = await context.Clientes.FirstOrDefaultAsync(x => x.Id == id);
 
-                if (cliente == null) return NotFound();
+                if (cliente == null) return NotFound(new ResultModel<Cliente>("Cliente não encontrado"));
 
                 cliente.Cpf = model.Cpf;
                 cliente.Nome = model.Nome;
@@ -89,15 +100,15 @@ namespace ApiFarmacia.Controller
 
                 context.Clientes.Update(cliente);
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok(new ResultModel<Cliente>(cliente));
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest("Não foi possível editar o cliente");
+                return StatusCode(500, new ResultModel<Cliente>("05x04 - Não foi possível editar cliente"));
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, "Falha interna no servidor");
+                return StatusCode(500, new ResultModel<Cliente>("05x10 - Falha interna no servidor"));
             }
         }
 
@@ -108,7 +119,7 @@ namespace ApiFarmacia.Controller
             {
                 var cliente = await context.Clientes.FirstOrDefaultAsync(x => x.Id == id);
 
-                if (cliente == null) return NotFound();
+                if (cliente == null) return NotFound(new ResultModel<Cliente>("Cliente não encontrado"));
 
                 context.Clientes.Remove(cliente);
                 await context.SaveChangesAsync();
@@ -117,11 +128,11 @@ namespace ApiFarmacia.Controller
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest("Não foi possível excluir o cliente");
+                return StatusCode(500, new ResultModel<Cliente>("05x04 - Não foi possível excluir cliente"));
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, "Falha interna no servidor");
+                return StatusCode(500, new ResultModel<Cliente>("05x10 - Falha interna no servidor"));
             }
         }
     }

@@ -8,19 +8,19 @@
             Errors = errors;
         }
 
-        public ResultViewModel(T data)
+        public ResultModel(T data)
         {
             Data = data;
         }
 
-        public ResultViewModel(List<string> errors)
+        public ResultModel(List<string> errors)
         {
             Errors = errors;
         }
 
-        public ResultViewModel(string error)
+        public ResultModel(string error)
         {
-            Errors.Add(error);   
+            Errors.Add(error);
         }
 
         public T Data { get; private set; }
