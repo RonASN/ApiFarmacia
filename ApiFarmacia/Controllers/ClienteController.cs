@@ -15,6 +15,7 @@ namespace ApiFarmacia.Controller
         [HttpGet("cliente/lista")]
         public async Task<IActionResult> GetAsync([FromServices] AppDbContext context)
         {
+            
             try
             {
                 var clientes = await context.Clientes.ToListAsync();
